@@ -87,10 +87,10 @@ while (true) {
     $data[3] = 0;
 }
 
-fclose($word_freqs);
 unset($data);
+fclose($input_file);
 
-# Let's use the first 25 entries for the top 25 words
+// Let's use the first 25 entries for the top 25 words
 $data = array_fill(0, 25, []);
 $data[] = ''; // [25] 단어
 $data[] = 0; // [26] 빈도
@@ -121,4 +121,4 @@ for ($i = 0; $i < 25; $i++) {
     echo "{$data[$i][0]}  -  {$data[$i][1]}" . PHP_EOL;
 }
 
-fclose($input_file);
+fclose($word_freqs);
