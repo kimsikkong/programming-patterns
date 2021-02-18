@@ -89,7 +89,7 @@ class WordFrequencyController
 
     public function __construct(string $file_path)
     {
-        $this->data_storage_manager = new Test($file_path);
+        $this->data_storage_manager = new DataStorageManager($file_path);
         $this->stop_word_manager = new StopWordManager();
         $this->word_frequency_manager = new WordFrequencyManager();
     }
