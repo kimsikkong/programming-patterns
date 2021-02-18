@@ -7,22 +7,22 @@ class WordFrequencyFramework
     private array $do_work_event_handlers = [];
     private array $end_event_handlers = [];
 
-    public function registerForLoadEvent($handler)
+    public function registerForLoadEvent(callable $handler): void
     {
         $this->load_event_handlers[] = $handler;
     }
 
-    public function registerForDoWorkEvent($handler)
+    public function registerForDoWorkEvent(callable $handler): void
     {
         $this->do_work_event_handlers[] = $handler;
     }
 
-    public function registerEndEvent($handler)
+    public function registerEndEvent(callable $handler): void
     {
         $this->end_event_handlers[] = $handler;
     }
 
-    public function run(string $file_path)
+    public function run(string $file_path): void
     {
         foreach ($this->load_event_handlers as $f) {
             $f($file_path);
@@ -52,7 +52,7 @@ class DataStorage
         $wordFrequencyFramework->registerForDoWorkEvent($this->produceWords());
     }
 
-    private function load()
+    private function load(): callable
     {
         return function (string $file_path) {
             $this->data = fread(fopen($file_path, 'r'), filesize($file_path));
@@ -60,7 +60,7 @@ class DataStorage
         };
     }
 
-    private function produceWords()
+    private function produceWords(): callable
     {
         return function () {
             foreach (explode(" ", $this->data) as $word) {
@@ -73,7 +73,7 @@ class DataStorage
         };
     }
 
-    public function registerForWorkEvent($handler)
+    public function registerForWorkEvent(callable $handler): void
     {
         $this->word_event_handler[] = $handler;
     }
@@ -89,7 +89,7 @@ class StopWordFilter
         $word_frequency_framework->registerForLoadEvent($this->load());
     }
 
-    private function load()
+    private function load(): callable
     {
         return function () {
             $this->stop_words = explode(",", fgets(fopen("../stop_words.txt", "r")));
@@ -118,7 +118,7 @@ class WordFrequencyCounter
         $word_frequency_framework->registerEndEvent($this->printFreqs());
     }
 
-    private function incrementCount()
+    private function incrementCount(): callable
     {
         return function ($word) {
             if (array_key_exists($word, $this->word_freq)) {
@@ -129,7 +129,7 @@ class WordFrequencyCounter
         };
     }
 
-    private function printFreqs()
+    private function printFreqs(): callable
     {
         return function () {
             arsort($this->word_freq);
